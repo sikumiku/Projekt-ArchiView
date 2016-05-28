@@ -15,10 +15,25 @@
 		<ul>
 			<li id="banner_left"><a href="?">HOME</a></li>
 			<li id="banner_left"><a href="?page=projects">PROJECTS</a></li>
-			<li id="banner_left"><a href="?page=myprojects">MY PROJECTS</a></li>
+			<?php if(isset($_SESSION['loggedinuser'])): ?>
+				<li id="banner_left"><a href="?page=myprojects">MY PROJECTS</a></li>
+			<?php endif; ?>
 			<li id="banner_left"><a href="?page=about">ABOUT</a></li>
 			<!-- siia on vaja luua loogika, mis vahetab login ja logout menyy nuppude vahel -->
-			<li id="banner_right"><a href="?page=login">LOG IN</a></li> 
+			<?php if(isset($_SESSION['loggedinuser'])): ?>
+				<li id="banner_right"><a href="?page=logout">LOG OUT</a></li> 
+			<?php else: ?>
+				<li id="banner_right"><a href="?page=registration">REGISTER</a></li> 
+				<li id="banner_right"><a href="?page=login">LOG IN</a></li> 
+			<?php endif; ?>
 			<li id="banner_right"><img id="profile_image" src="Pildid/profile_image_default.png"></img></li>
+			<?php if(isset($_SESSION['loggedinuser'])): ?>
+				<li id="banner_right">
+					<a><?php 
+						$sisselogitudkasutaja = $_SESSION['loggedinuser'];
+						echo $sisselogitudkasutaja;
+					?></a>
+				</li>
+			<?php endif; ?>
 		</ul>
 	</div>

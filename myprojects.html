@@ -1,34 +1,37 @@
-<!-- Siia suunatakse ainult siis, kui kasutaja on sisse loginud. In future this will be moved to myprojects.php and will be controller by controller.*/ -->
-
-	<!-- MAIN BODY -->
-	<div class="body">
-		<!-- COLUMNS -->
-	  	<div class="column1">
-	  		
-	  	</div>
-	  	<div class="column2">
-	  		<h1>MY PROJECTS</h1>
-	  		<p>
-	  			<a href="project1.html">
-	  			<div id="floating_project">
-					<span id="projecttitle">PROJEKT1</span>
-					<img src="Pildid/Chell.png"></img>
-				</div></a></br>
-				<div id="floating_project">
-					<span id="projecttitle">PROJEKT1</span>
-					<img src="Pildid/Chell.png"></img>
-				</div></br>
-				<div id="floating_project">
-					<span id="projecttitle">PROJEKT1</span>
-					<img src="Pildid/Chell.png"></img>
-				</div></br>
-	  		</p>
-	  		<p>
-	  			
-	  		</p>
-		</div>
-	  	<div class="column3">
-	  		
-	  	</div>
+<!-- MAIN BODY -->
+<div class="body">
+	<!-- COLUMNS -->
+  	<div class="column1">
+  		
+  	</div>
+  	<div class="column2">
+  		<?php $sisselogitudkasutaja = $_SESSION['loggedinuser'] ?>
+  		<h1>You have been logged in as: <?php echo $sisselogitudkasutaja ?>
+  		<h1>MY PROJECTS</h1>
+  		<p>
+  			<a href="?page=upload">Upload a new project</a>
+  		</p>
+  		<p>
+  			<a href="project1.html">
+  			<div id="floating_project">
+				<span id="projecttitle">PROJEKT1</span>
+				<img src="Pildid/Chell.png"></img>
+			</div></a></br>
+			<div id="floating_project">
+				<span id="projecttitle">PROJEKT1</span>
+				<img src="Pildid/Chell.png"></img>
+			</div></br>
+			<div id="floating_project">
+				<span id="projecttitle">PROJEKT1</span>
+				<img src="Pildid/Chell.png"></img>
+			</div></br>
+  		</p>
+  		<p>
+  			
+  		</p>
 	</div>
+  	<div class="column3">
+  		
+  	</div>
+</div>
 

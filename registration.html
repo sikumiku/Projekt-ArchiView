@@ -1,0 +1,45 @@
+<form action="?page=registration" method="POST" >
+	
+		<table class="tabel">
+			<caption>Registration</caption>
+			
+			<tr>
+				<th>
+					Username
+				</th>
+				<td>
+					<input type="text" name="username_reg" placeholder="Enter username">
+				</td>
+			</tr>
+			
+			<tr>
+				<th>
+					Password
+				</th>
+				<td>
+					<input type="password" name="password_reg1" placeholder="Enter password">
+				</td>
+			</tr>
+			
+			<tr>
+				<th>
+					Repeat password
+				</th>
+				<td>
+					<input type="password" name="password_reg2" placeholder="Repeat password">
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="2">
+					<button type="submit" value="REGISTER"><em>Register</em></button>
+				</td>
+			</tr>
+		</table>
+		<?php if (isset($errors)):?>
+		<?php foreach($errors as $error):?>
+			<div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
+		<?php endforeach;?>
+	<?php endif;?>
+	
+</form>

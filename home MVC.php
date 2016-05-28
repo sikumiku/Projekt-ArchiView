@@ -24,8 +24,14 @@ switch($page){
 	case "about":
 		about();
 	break;
+	case "upload":
+		upload();
+	break;
 	case "login":
 		login();
+	break;
+	case "registration":
+		registration();
 	break;
 	case "logout":
 		logout();
