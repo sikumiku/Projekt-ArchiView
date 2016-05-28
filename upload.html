@@ -1,28 +1,22 @@
 <div class="body">
-		
+	<form action="?page=upload" method="POST" enctype="multipart/form-data" >	
 	  	<div class="column1">
 	  		<h2>UPLOAD DRAWINGS</h2>
-  			<form action="?page=upload" method="POST" enctype="multipart/form-data" >
-				<p><input type="file" name="drawing_upload"/></p>
-				<p><input type="submit" name="upload" value="UPLOAD"></p>
-			</form>
-	  		
+  				<p><input type="file" name="drawing_upload"/></p>
 	  	</div>
 	  	<div class="column2">
 	  		<h1>UPLOAD PROJECT</h1>
 	  		</br>
-	  		<input type="text" name="projecttitle" placeholder="Project Title"/>
+	  			<input type="text" name="projecttitle_upload" placeholder="Project Title"/>
 	  		<br/>
 	  		<h2>PROJECT DESCRIPTION</h2>
 	  		</br>
-	  			<textarea name="projecttext" rows="25" cols="30" placeholder="Write project description here."></textarea>
+	  			<textarea name="projecttext_upload" rows="25" cols="30" placeholder="Write project description here."></textarea>
 		</div>
 	  	<div class="column3">
 	  		<h1>UPLOAD 3D IMAGERY</h1>
-
-	  		<form action="?page=upload" method="POST" enctype="multipart/form-data" >
-				<p><input type="file" name="3d_imagery_upload"/></p>
-				<p><input type="submit" name="upload" value="UPLOAD"></p>
-			</form>
+				<p><input type="file" name="imagery_upload"/></p>
 	  	</div>
+	  	<p><input type="submit" name="upload" value="UPLOAD"></p>
+	</form>
 </div>

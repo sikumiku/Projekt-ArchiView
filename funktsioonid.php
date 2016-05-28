@@ -101,25 +101,52 @@ function registration(){
 }
 
 function upload() {
+	global $connection;
+
 	include_once('upload.html');
 
 	if(isset($_POST['upload'])){
-		$name = $_FILES["drawing_upload"]["name"];
+		$drawingname = $_FILES["drawing_upload"]["name"];
+		$imageryname = $_FILES["imagery_upload"]["name"];
 
-		$tmp_name = $_FILES['drawing_upload']['tmp_name'];
+		$tmp_name1 = $_FILES['drawing_upload']['tmp_name'];
+		$tmp_name2 = $_FILES['imagery_upload']['tmp_name'];
+
+		$error = array();
 		$error = $_FILES['drawing_upload']['error'];
+		$error = $_FILES['imagery_upload']['error'];
 
-		if (isset ($name)) {
-		    if (!empty($name)) {
+		if (isset ($drawingname) && isset ($imageryname)) {
+		    if (!empty($drawingname) && !empty($imageryname)) {
 
 		    $location = '../Projekt/Uploads/';
 
-		    if  (move_uploaded_file($tmp_name, $location.$name)){
-		        echo 'Uploaded';    
+		    if (move_uploaded_file($tmp_name1, $location.$drawingname) && move_uploaded_file($tmp_name2, $location.$imageryname)) {
+		        $success['Message'] = "Upload was successful.";
+		        echo $success;
+		    }
+
+		    if (!empty($success)) {
+				$user = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
+				$drawing = mysqli_real_escape_string($connection, $drawingname);
+				$projecttitle = mysqli_real_escape_string($connection, $_POST['projecttitle_upload']);
+				$projecttext = mysqli_real_escape_string($connection, $_POST['projecttext_upload']);
+				$imagery = mysqli_real_escape_string($connection, $imageryname);
+				$sql = "INSERT INTO saasma_archiview_drawings (username, drawing, projecttitle, projecttext, 3dimagery) VALUES ('$user', '$drawing', '$projecttitle', '$projecttext', '$imagery')";
+				$result = mysqli_query($connection, $sql);
+				if ($result) {
+					$id = mysqli_insert_id($connection);
+					
+					$_SESSION['message'] = "Upload was successful.";
+					header("Location: ?page=project_$id");
+					exit(0);
+				} else {
+					$error['save'] = "Please try to upload your project again.";
+				}
 		    }
 
 	        } else {
-	          echo 'please choose a file';
+	          echo 'Please choose files.';
 	          echo $error;
 		    }
 		}
