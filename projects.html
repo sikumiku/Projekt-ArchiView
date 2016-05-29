@@ -1,43 +1,18 @@
-<!-- Siin on k6ik yles laetud projektid. Sisu genereeritakse yles laetud projektidest databaasis. In future this will be moved to projects.php and will be controller by controller -->
+<!-- Siin on k6ik yles laetud projektid. Sisu genereeritakse yles laetud projektidest databaasis.-->
 
 
 	<div class="body2">
 		<!-- SIIA TULEB WHILE TSYKKEL MIS GENEREERIB K6IK YLES LAETUD PROJEKTID -->
-		<div id="floating_project">
-			<span id="projecttitle">PROJEKT1</span>
-			<img src="Pildid/Chell.png"></img>
-		</div>
-		<div id="floating_project">
-			<span id="projecttitle">PROJEKT2</span>
-			<img src="Pildid/CaveJohnson.png"></img>
-		</div>
-		<div id="floating_project">
-			<span id="projecttitle">PROJEKT2</span>
-			<img src="Pildid/CaveJohnson.png"></img>
-		</div>
-		<div id="floating_project">
-			<span id="projecttitle">PROJEKT2</span>
-			<img src="Pildid/CaveJohnson.png"></img>
-		</div>
-		<div id="floating_project">
-			<span id="projecttitle">PROJEKT2</span>
-			<img src="Pildid/CaveJohnson.png"></img>
-		</div>
-		<div id="floating_project">
-			<span id="projecttitle">PROJEKT2</span>
-			<img src="Pildid/CaveJohnson.png"></img>
-		</div>
-		<div id="floating_project">
-			<span id="projecttitle">PROJEKT2</span>
-			<img src="Pildid/CaveJohnson.png"></img>
-		</div>
-		<div id="floating_project">
-			<span id="projecttitle">PROJEKT2</span>
-			<img src="Pildid/CaveJohnson.png"></img>
-		</div>
-		<div id="floating_project">
-			<span id="projecttitle">PROJEKT2</span>
-			<img src="Pildid/CaveJohnson.png"></img>
-		</div>
+		<?php if (!empty($projectquery)) :?>
+			
+			 <?php foreach ($projectquery as $project) :?>
+				<a href="?page=project=<?php echo $project['id']; ?>"><div id="floating_project">
+					<span id="projecttitle"><?php echo $project['projecttitle']; ?></span>
+					<img src="Uploads/<?php echo $project['drawing'] ?>"></img>
+				</div></a>
+			<?php endforeach; ?>
+		<?php else: ?>
+		<p>No projects currently.</p>
+		<?php endif; ?>
 	</div>
 

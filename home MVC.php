@@ -21,6 +21,9 @@ switch($page){
 	case "myprojects":
 		myprojects();
 	break;
+	case "showproject";
+		showproject();
+	break;
 	case "about":
 		about();
 	break;

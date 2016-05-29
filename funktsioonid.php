@@ -123,7 +123,7 @@ function upload() {
 
 		    if (move_uploaded_file($tmp_name1, $location.$drawingname) && move_uploaded_file($tmp_name2, $location.$imageryname)) {
 		        $success['Message'] = "Upload was successful.";
-		        echo $success;
+		        print_r($success);
 		    }
 
 		    if (!empty($success)) {
@@ -132,7 +132,7 @@ function upload() {
 				$projecttitle = mysqli_real_escape_string($connection, $_POST['projecttitle_upload']);
 				$projecttext = mysqli_real_escape_string($connection, $_POST['projecttext_upload']);
 				$imagery = mysqli_real_escape_string($connection, $imageryname);
-				$sql = "INSERT INTO saasma_archiview_drawings (username, drawing, projecttitle, projecttext, 3dimagery) VALUES ('$user', '$drawing', '$projecttitle', '$projecttext', '$imagery')";
+				$sql = "INSERT INTO saasma_archiview_projectcontent (username, projecttitle, projecttext) VALUES ('$user', '$projecttitle', '$projecttext')";
 				$result = mysqli_query($connection, $sql);
 				if ($result) {
 					$id = mysqli_insert_id($connection);
@@ -153,15 +153,82 @@ function upload() {
 	}
 }
 
+function showproject() {
+
+
+	global $connection;
+
+	$currentuser = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
+
+	if (!empty($_GET['id'])) {
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
+
+    $sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, imagery.imagery
+	FROM saasma_archiview_projectcontent AS content
+	INNER JOIN saasma_archiview_drawings AS drawings ON content.username = drawings.username
+	AND content.projecttitle = drawings.projecttitle
+	INNER JOIN saasma_archiview_imagery AS imagery ON drawings.username = imagery.username
+	AND drawings.projecttitle = imagery.projecttitle"; 
+    $result = mysqli_query($connection, $sql);
+    if ($result && mysqli_num_rows($result) > 0) {
+      $showprojectquery = mysqli_fetch_assoc($result);
+
+    include_once('showproject.html');
+
+}
+}
+}
+
 function homepage() {
 	include_once('home.html');
 }
 
 function projects() {
+	
+	global $connection;
+
+	$currentuser = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
+
+	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, imagery.imagery
+FROM saasma_archiview_projectcontent AS content
+INNER JOIN saasma_archiview_drawings AS drawings ON content.username = drawings.username
+AND content.projecttitle = drawings.projecttitle
+INNER JOIN saasma_archiview_imagery AS imagery ON drawings.username = imagery.username
+AND drawings.projecttitle = imagery.projecttitle"; 
+	
+	$result = mysqli_query($connection, $sql);
+
+	$projectquery = array();
+
+	while ($project = mysqli_fetch_assoc($result)) {
+		$projectquery[] = $project;
+	}
+
 	include_once('projects.html');
+
 }
 
+
 function myprojects() {
+	global $connection;
+
+	$currentuser = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
+
+	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, imagery.imagery
+	FROM saasma_archiview_projectcontent AS content
+	INNER JOIN saasma_archiview_drawings AS drawings ON content.username = drawings.username
+	AND content.projecttitle = drawings.projecttitle
+	INNER JOIN saasma_archiview_imagery AS imagery ON drawings.username = imagery.username
+	AND drawings.projecttitle = imagery.projecttitle WHERE content.username = '$currentuser'"; 
+
+	$result = mysqli_query($connection, $sql);
+
+	$individualprojectquery = array();
+
+	while ($project = mysqli_fetch_assoc($result)) {
+		$individualprojectquery[] = $project;
+	}
+
 	include_once('myprojects.html');
 }
 

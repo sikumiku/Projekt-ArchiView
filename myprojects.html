@@ -4,31 +4,45 @@
   	<div class="column1">
   		
   	</div>
-  	<div class="column2">
+  		<div class="column2">
+
   		<?php $sisselogitudkasutaja = $_SESSION['loggedinuser'] ?>
   		<h1>You have been logged in as: <?php echo $sisselogitudkasutaja ?>
   		<h1>MY PROJECTS</h1>
+  		
   		<p>
-  			<a href="?page=upload">Upload a new project</a>
+  			<a href="?page=upload" class="myButton">Upload a new project</a>
   		</p>
   		<p>
-  			<a href="project1.html">
-  			<div id="floating_project">
-				<span id="projecttitle">PROJEKT1</span>
-				<img src="Pildid/Chell.png"></img>
-			</div></a></br>
-			<div id="floating_project">
-				<span id="projecttitle">PROJEKT1</span>
-				<img src="Pildid/Chell.png"></img>
-			</div></br>
-			<div id="floating_project">
-				<span id="projecttitle">PROJEKT1</span>
-				<img src="Pildid/Chell.png"></img>
-			</div></br>
-  		</p>
-  		<p>
+  			<!-- <table>  replace image with file from array as well 
   			
-  		</p>
+			</table> -->
+
+	
+		<table style="width: 470px">
+		
+		<?php if (!empty($individualprojectquery)) :?>
+			<?php foreach ($individualprojectquery as $ind_query) :?>
+			<tr>
+				<td>	
+  					<a id="projectthumbnail" href="?page=project=<?php echo $ind_query['id']; ?>">
+  				<div id="floating_project2">
+					<span id="projecttitle"><?php $ind_query['projecttitle'] ?></span>
+					<img src="Uploads/<?php echo $ind_query['drawing'] ?>"></img>
+				</div>
+				</a>
+				</td>
+				<td class="button">
+					<a href="?page=change" class="myButton2">EDIT</a>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+		<?php else:?>
+		<p>No projects yet, go upload one!</p>
+		<?php endif; ?>
+		</table>
+		
+  		
 	</div>
   	<div class="column3">
   		
