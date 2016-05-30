@@ -1,9 +1,23 @@
-<div id="login">
-	<form action="?page=login" method="POST" >
-		<input type="text" name="user" placeholder="Username"/><br/>
-		<input type="password" name="pass" placeholder="Password"/><br/>
-		<input type="submit" value="LOG IN"/>
-	</form>
+<div class="login_registration">
+		<div class="login_registration-screen">
+			
+			<div class="login_registration-form">
+				<div class="control-group">
+					<form action="?page=login" method="POST" >
+					<input type="text" name="user" class="login-field" placeholder="Username" id="login-name">
+					<label class="login-field-icon fui-user" for="login-name"></label>
+				</div>
+
+				<div class="control-group">
+					<input type="password" name="pass" class="login-field" placeholder="Password" id="login-pass">
+					<label class="login-field-icon fui-lock" for="login-pass"></label>
+				</div>
+				<input type="submit" class="btn btn-primary btn-large btn-block" value="Login">
+				</form>
+			</div>
+		</div>
+	</div>
+
 	<?php if (isset($errors)):?>
 		<?php foreach($errors as $error):?>
 			<div style="color:red;"><?php echo htmlspecialchars($error); ?></div>

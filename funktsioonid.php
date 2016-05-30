@@ -132,13 +132,24 @@ function upload() {
 				$projecttitle = mysqli_real_escape_string($connection, $_POST['projecttitle_upload']);
 				$projecttext = mysqli_real_escape_string($connection, $_POST['projecttext_upload']);
 				$imagery = mysqli_real_escape_string($connection, $imageryname);
-				$sql = "INSERT INTO saasma_archiview_projectcontent (username, projecttitle, projecttext) VALUES ('$user', '$projecttitle', '$projecttext')";
+				// sqlToInsertProject
+				$sql = "INSERT INTO saasma_archiview_projectcontent (username, projecttitle, projecttext)
+					VALUES('$user', '$projecttitle', '$projecttext');";
 				$result = mysqli_query($connection, $sql);
+
 				if ($result) {
 					$id = mysqli_insert_id($connection);
-					
+					// loo tsykkel, mis iga drawing massiivis oleva elemendi kohta sisestab drawing tabelli rea
+					$sql2 = "INSERT INTO saasma_archiview_drawings (drawing, project_id) 
+					VALUES ('$drawing', '$id');";
+					$result2 = mysqli_query($connection, $sql2);
+					// loo tsykkel, mis iga imagery massiivis oleva elemendi kohta sisestab imagery tabelisse rea
+					$sql3 = "INSERT INTO saasma_archiview_imagery (imagery, project_id) 
+					VALUES ('$imagery', '$id');";
+					$result3 = mysqli_query($connection, $sql3);
 					$_SESSION['message'] = "Upload was successful.";
-					header("Location: ?page=project_$id");
+
+					header("Location: ?page=project&id=$id");
 					exit(0);
 				} else {
 					$error['save'] = "Please try to upload your project again.";
@@ -155,28 +166,28 @@ function upload() {
 
 function showproject() {
 
-
 	global $connection;
 
-	$currentuser = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
+	
 
 	if (!empty($_GET['id'])) {
-    $id = mysqli_real_escape_string($conn, $_GET['id']);
+    	$id = mysqli_real_escape_string($connection, $_GET['id']);
+	}
 
     $sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, imagery.imagery
 	FROM saasma_archiview_projectcontent AS content
 	INNER JOIN saasma_archiview_drawings AS drawings ON content.username = drawings.username
 	AND content.projecttitle = drawings.projecttitle
-	INNER JOIN saasma_archiview_imagery AS imagery ON drawings.username = imagery.username
-	AND drawings.projecttitle = imagery.projecttitle"; 
+	INNER JOIN saasma_archiview_imagery AS imagery ON content.id = $id";
+
     $result = mysqli_query($connection, $sql);
+
     if ($result && mysqli_num_rows($result) > 0) {
       $showprojectquery = mysqli_fetch_assoc($result);
 
     include_once('showproject.html');
 
-}
-}
+	}
 }
 
 function homepage() {
@@ -187,14 +198,10 @@ function projects() {
 	
 	global $connection;
 
-	$currentuser = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
-
-	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, imagery.imagery
-FROM saasma_archiview_projectcontent AS content
-INNER JOIN saasma_archiview_drawings AS drawings ON content.username = drawings.username
-AND content.projecttitle = drawings.projecttitle
-INNER JOIN saasma_archiview_imagery AS imagery ON drawings.username = imagery.username
-AND drawings.projecttitle = imagery.projecttitle"; 
+	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, drawings.project_id, imagery.imagery, imagery.project_id
+	FROM saasma_archiview_projectcontent AS content
+	INNER JOIN saasma_archiview_drawings AS drawings ON content.id = drawings.project_id
+	INNER JOIN saasma_archiview_imagery AS imagery ON content.id = imagery.project_id"; 
 	
 	$result = mysqli_query($connection, $sql);
 
@@ -212,14 +219,17 @@ AND drawings.projecttitle = imagery.projecttitle";
 function myprojects() {
 	global $connection;
 
+	if (empty($_SESSION['loggedinuser'])) {
+    	header("Location: ?page=projects");
+ 	}
+
 	$currentuser = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
 
-	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, imagery.imagery
+	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, drawings.project_id, imagery.imagery, imagery.project_id
 	FROM saasma_archiview_projectcontent AS content
-	INNER JOIN saasma_archiview_drawings AS drawings ON content.username = drawings.username
-	AND content.projecttitle = drawings.projecttitle
-	INNER JOIN saasma_archiview_imagery AS imagery ON drawings.username = imagery.username
-	AND drawings.projecttitle = imagery.projecttitle WHERE content.username = '$currentuser'"; 
+	INNER JOIN saasma_archiview_drawings AS drawings ON content.id = drawings.project_id
+	INNER JOIN saasma_archiview_imagery AS imagery ON content.id = imagery.project_id WHERE content.username = '$currentuser'"; 
+
 
 	$result = mysqli_query($connection, $sql);
 

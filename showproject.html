@@ -1,24 +1,25 @@
 <div class="body">
   	<div class="column1"> 
   	<!-- create a loop that displays all the images from database where id matches and is in drawing column (currently need to change code to accommodate this) -->
-  		<img src="Pildid/nameless4.jpg"></img></br>
-  		<img src="Pildid/nameless5.jpg"></img></br>
-  		<img src="Pildid/nameless6.jpg"></img></br>
+
+  		<?php if (!empty($showprojectquery['drawing'])) :?>
+			
+			 <?php foreach ($showprojectquery as $project) :?>
+			 	<img src="Uploads/<?php if (isset($showprojectquery['drawing'])) echo $showprojectquery['drawing']; ?>" alt="Foto<?php echo $showprojectquery['id'] ?>" max-width="400" /></img></br>
+			<?php endforeach; ?>
+		<?php else: ?>
+		<p>No drawings currently.</p>
+		<?php endif; ?>
   	</div>
   	<div class="column2">
-
-  		<?php if (!empty($showprojectquery['drawing'])) : ?>
-  <img src="<?php if (isset($showprojectquery['drawing'])) echo $showprojectquery['drawing']; ?>" alt="Foto" height="200" width="300" />
-<?php endif; ?>
-
+  		<?php print_r($showprojectquery)?>
   		 <!-- generate a title matching id -->
-  		<h1><?php if (!empty($projectquery)) {
-  				if (projectquery['id'] == $id) {
-  					echo "Query was a success.";
-  					echo projectquery['projecttitle'];
+  		<h1><?php if (!empty($showprojectquery)) {
+  				if ($showprojectquery['id'] == $id) {
+  					echo $showprojectquery['projecttitle'];
   				}
   			}
-  		}?></h1>
+  		?></h1>
   		<p> 
   		<!-- get project text from database where id matches -->
   			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ornare mi metus, non faucibus nunc sodales venenatis. Vestibulum elit massa, porttitor eu efficitur eu, ullamcorper et libero. Cras ullamcorper nunc euismod nulla pharetra, vitae aliquam mauris convallis. Pellentesque vel sagittis lorem. Morbi eget dictum mauris, sit amet accumsan felis. Etiam tincidunt malesuada nisi, sit amet consequat est. Nunc non mi lobortis sem convallis blandit nec vitae dui. Praesent nisi turpis, egestas sed facilisis vel, suscipit non quam. Duis gravida pharetra efficitur. Nullam et finibus arcu. Curabitur tempor ultrices metus, id dignissim nisl imperdiet eu. Donec mi ligula, mattis ut augue mollis, laoreet bibendum lorem. Quisque sed mauris convallis, gravida dolor at, elementum massa. Fusce eu congue massa. Aenean arcu turpis, facilisis eu luctus id, consectetur sed neque. Aliquam vitae molestie felis.
@@ -35,9 +36,14 @@
 	</div>
   	<div class="column3">
   	<!-- create a loop that displays all the images from database where id matches and is in drawing column (currently need to change code to accommodate this) -->
-  		<img src="Pildid/nameless1.jpg"></img></br>
-  		<img src="Pildid/nameless2.jpg"></img></br>
-  		<img src="Pildid/nameless3.jpg"></img></br>
+  		<?php if (!empty($showprojectquery['imagery'])) :?>
+			
+			 <?php foreach ($showprojectquery as $project) :?>
+			 	<img src="Uploads/<?php if (isset($showprojectquery['imagery'])) echo $showprojectquery['imagery']; ?>" alt="Foto<?php echo $showprojectquery['id'] ?>" max-width="400" /></img></br>
+			<?php endforeach; ?>
+		<?php else: ?>
+			<p>No drawings currently.</p>
+		<?php endif; ?>
   	</div>
 </div>
 

@@ -6,7 +6,7 @@
 		<?php if (!empty($projectquery)) :?>
 			
 			 <?php foreach ($projectquery as $project) :?>
-				<a href="?page=project=<?php echo $project['id']; ?>"><div id="floating_project">
+				<a href="?page=showproject&id=<?php echo $project['id']; ?>"><div id="floating_project">
 					<span id="projecttitle"><?php echo $project['projecttitle']; ?></span>
 					<img src="Uploads/<?php echo $project['drawing'] ?>"></img>
 				</div></a>

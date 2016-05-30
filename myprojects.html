@@ -2,7 +2,7 @@
 <div class="body">
 	<!-- COLUMNS -->
   	<div class="column1">
-  		
+  		 &nbsp;
   	</div>
   		<div class="column2">
 
@@ -25,9 +25,9 @@
 			<?php foreach ($individualprojectquery as $ind_query) :?>
 			<tr>
 				<td>	
-  					<a id="projectthumbnail" href="?page=project=<?php echo $ind_query['id']; ?>">
+  					<a id="projectthumbnail" href="?page=showproject&id=<?php echo $ind_query['id']; ?>">
   				<div id="floating_project2">
-					<span id="projecttitle"><?php $ind_query['projecttitle'] ?></span>
+					<span id="projecttitle"><?php echo $ind_query['projecttitle']; ?></span>
 					<img src="Uploads/<?php echo $ind_query['drawing'] ?>"></img>
 				</div>
 				</a>

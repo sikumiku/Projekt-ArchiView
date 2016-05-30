@@ -1,45 +1,30 @@
-<form action="?page=registration" method="POST" >
-	
-		<table class="tabel">
-			<caption>Registration</caption>
+<div class="login_registration">
+		<div class="login_registration-screen">
 			
-			<tr>
-				<th>
-					Username
-				</th>
-				<td>
-					<input type="text" name="username_reg" placeholder="Enter username">
-				</td>
-			</tr>
-			
-			<tr>
-				<th>
-					Password
-				</th>
-				<td>
-					<input type="password" name="password_reg1" placeholder="Enter password">
-				</td>
-			</tr>
-			
-			<tr>
-				<th>
-					Repeat password
-				</th>
-				<td>
-					<input type="password" name="password_reg2" placeholder="Repeat password">
-				</td>
-			</tr>
-			
-			<tr>
-				<td colspan="2">
-					<button type="submit" value="REGISTER"><em>Register</em></button>
-				</td>
-			</tr>
-		</table>
-		<?php if (isset($errors)):?>
+			<div class="login_registration-form">
+				<div class="control-group">
+					<form action="?page=registration" method="POST" >
+					<input type="text" name="username_reg" class="login-field" placeholder="Username" id="login-name">
+					<label class="login-field-icon fui-user" for="login-name"></label>
+				</div>
+
+				<div class="control-group">
+					<input type="password" name="password_reg1" class="login-field" placeholder="Password" id="login-pass">
+					<label class="login-field-icon fui-lock" for="login-pass"></label>
+				</div>
+				<div class="control-group">
+					<input type="password" name="password_reg2" class="login-field" placeholder="Repeat password" id="login-pass">
+					<label class="login-field-icon fui-lock" for="login-pass"></label>
+				</div>
+				<input type="submit" class="btn btn-primary btn-large btn-block" value="Register">
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<?php if (isset($errors)):?>
 		<?php foreach($errors as $error):?>
 			<div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
 		<?php endforeach;?>
 	<?php endif;?>
-	
-</form>
+</div>

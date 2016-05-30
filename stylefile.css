@@ -14,24 +14,106 @@ body {
     box-sizing: border-box;
 }
 
+*:focus {
+	outline: none;
+}
+
+.login_registration { 
+margin-top: 300px;
+margin: 20px auto;
+width: 300px;
+}
+
+.login_registration-screen {
+
+margin-top: 300px;
+background-color: #FFF;
+padding: 20px;
+border-radius: 5px
+}
+
+.login_registration-form {
+text-align: center;
+}
+
+.control-group {
+margin-bottom: 10px;
+}
+
+input.login-field{
+text-align: center;
+background-color: #ECF0F1;
+border: 2px solid transparent;
+border-radius: 3px;
+font-size: 16px;
+font-weight: 200;
+padding: 10px 0;
+width: 250px;
+transition: border .5s;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #ECF0F1 inset;
+}
+
+input:focus {
+border: 2px solid #3498DB;
+box-shadow: none;
+}
+
+.btn {
+  border: 2px solid transparent;
+  background: #3498DB;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 25px;
+  padding: 10px 0;
+  text-decoration: none;
+  text-shadow: none;
+  border-radius: 3px;
+  box-shadow: none;
+  transition: 0.25s;
+  display: block;
+  width: 250px;
+  margin: 0 auto;
+}
+
+.btn:hover {
+  background-color: #2980B9;
+}
+
+.login-link {
+  font-size: 12px;
+  color: #444;
+  display: block;
+	margin-top: 12px;
+}
+
 div.body {
 	display: inline-block;
 	width: 100%;
+}
+
+div.title {
+	
+	display:block;
+	width: 100%;
+	padding-top: 30px;
+	text-align: center;
 }
 
 div.column1 {
 	display: inline-block;
     float: left;
     width: 33.33%;
-    padding: 50px;
-   
+    padding-left: 50px;
+   	padding-right: 50px;
 }
 
 div.column2 {
 	display: inline-block;
     float: left;
     width: 33.33%;
-    padding-top: 20px;
     padding-left: 70px;
     padding-right: 70px;
 
@@ -43,7 +125,8 @@ div.column3 {
 	display: inline-block;
     float: right;
     width: 33.33%;
-    padding: 50px;
+    padding-left: 50px;
+   	padding-right: 50px;
    
 }
 
@@ -99,6 +182,9 @@ h1 {
 	text-align: center;
 }
 
+h2 {
+	text-align: center;
+}
 
 
 .body2 {
@@ -316,3 +402,57 @@ td.button {
 	align: center;
 	valign: middle;
 }
+
+
+
+.js .inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile {
+    max-width: 80%;
+    font-size: 1.25rem;
+    /* 20px */
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+    /* 10px 20px */
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.no-js .inputfile + label {
+    display: none;
+}
+
+.inputfile:focus + label,
+.inputfile.has-focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+
+
+.inputfile-1 + label {
+    color: #fff;
+    background-color: #79bbff;
+}
+
+.inputfile-1:focus + label,
+.inputfile-1.has-focus + label,
+.inputfile-1 + label:hover {
+    background-color: #378de5;
+}
+
