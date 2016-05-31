@@ -403,56 +403,22 @@ td.button {
 	valign: middle;
 }
 
-
-
-.js .inputfile {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-}
-
-.inputfile {
-    max-width: 80%;
-    font-size: 1.25rem;
-    /* 20px */
-    font-weight: 700;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
-    overflow: hidden;
-    padding: 0.625rem 1.25rem;
-    /* 10px 20px */
+.file_button_container,
+.file_button_container input {
+    height: 47px;
+    width: 263px;
     margin-left: auto;
     margin-right: auto;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	position: relative;
+	display: flex;
+ 	align-items: center;
+ 	justify-content: center;
 }
 
-.no-js .inputfile + label {
-    display: none;
+.file_button_container {
+    background: transparent url(http://i.stack.imgur.com/BT5AB.png) left top no-repeat;
 }
 
-.inputfile:focus + label,
-.inputfile.has-focus + label {
-    outline: 1px dotted #000;
-    outline: -webkit-focus-ring-color auto 5px;
+.file_button_container input {
+    opacity: 0;
 }
-
-
-
-.inputfile-1 + label {
-    color: #fff;
-    background-color: #79bbff;
-}
-
-.inputfile-1:focus + label,
-.inputfile-1.has-focus + label,
-.inputfile-1 + label:hover {
-    background-color: #378de5;
-}
-
