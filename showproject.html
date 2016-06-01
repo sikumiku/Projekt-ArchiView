@@ -38,7 +38,8 @@
 
 			
 			 <?php foreach ($imageryarray as $imagery) :?>
-			 	<img src="Uploads/<?php if (isset($imagery['imagery'])) echo $imagery['imagery']; ?>" alt="Photo<?php echo $imagery['project_id']; ?>" max-width="400" /></img></br>
+			 <p>
+			 	<img src="Uploads/<?php if (isset($imagery['imagery'])) echo $imagery['imagery']; ?>" alt="Photo<?php echo $imagery['project_id']; ?>" max-width="400" /></img></br></p>
 			<?php endforeach; ?>
 		<?php else: ?>
 			<p>No drawings currently.</p>

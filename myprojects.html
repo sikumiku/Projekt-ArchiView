@@ -1,9 +1,9 @@
 <!-- MAIN BODY -->
 <div class="body">
 	<!-- COLUMNS -->
-  	<div class="column1">
-  		 &nbsp;
-  	</div>
+	  	<div class="column1">
+	  		 &nbsp;
+	  	</div>
   		<div class="column2">
 
   		<?php $sisselogitudkasutaja = $_SESSION['loggedinuser'] ?>
@@ -14,38 +14,35 @@
   			<a href="?page=upload" class="myButton">Upload a new project</a>
   		</p>
   		<p>
-  			<!-- <table>  replace image with file from array as well 
-  			
-			</table> -->
-
-	
-		<table style="width: 470px">
-		
-		<?php if (!empty($individualprojectquery)) :?>
-			<?php foreach ($individualprojectquery as $ind_query) :?>
-			<tr>
-				<td>	
-  					<a id="projectthumbnail" href="?page=showproject&id=<?php echo $ind_query['id']; ?>">
-  				<div id="floating_project2">
-					<span id="projecttitle"><?php echo $ind_query['projecttitle']; ?></span>
-					<img src="Uploads/<?php echo $ind_query['imagery'] ?>"></img>
-				</div>
-				</a>
-				</td>
-				<td class="button">
-					<a href="?page=change" class="myButton2">EDIT</a>
-				</td>
-			</tr>
-			<?php endforeach; ?>
-		<?php else:?>
-		<p style="text-align: center;">No projects yet, go upload one!</p>
-		<?php endif; ?>
-		</table>
+  				
+			<table style="width: 470px">
+			
+			<?php if (!empty($individualprojectquery)) :?>
+				<?php foreach ($individualprojectquery as $ind_query) :?>
+				<tr>
+					<td>	
+	  					<a id="projectthumbnail" href="?page=showproject&id=<?php echo $ind_query['id']; ?>">
+	  				<div id="floating_project2">
+						<span id="projecttitle"><?php echo $ind_query['projecttitle']; ?></span>
+						<img src="Uploads/<?php echo $ind_query['imagery'] ?>"></img>
+					</div>
+					</a>
+					</td>
+					<td class="button">
+						<a href="?page=change" class="myButton2">EDIT</a>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			<?php else:?>
+			<p style="text-align: center;">No projects yet, go upload one!</p>
+			<?php endif; ?>
+			</table>
+			<p style="text-align: center;">Edit function is currently under construction.</p>
 		
   		
-	</div>
-  	<div class="column3">
-  		
-  	</div>
+		</div>
+	  	<div class="column3">
+	  		
+	  	</div>
 </div>
 
