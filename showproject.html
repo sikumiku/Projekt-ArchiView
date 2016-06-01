@@ -6,7 +6,8 @@
 
 			
 			 <?php foreach ($drawingarray as $drawing) :?>
-			 	<img src="Uploads/<?php if (isset($drawing['drawing'])) echo $drawing['drawing']; ?>" alt="Foto<?php echo $drawing['project_id'] ?>" max-width="400" /></img></br>
+			 <p>
+			 	<img src="Uploads/<?php if (isset($drawing['drawing'])) echo $drawing['drawing']; ?>" alt="Photo<?php echo $drawing['project_id'] ?>" max-width="400" /></img></br></p>
 			<?php endforeach; ?>
 		<?php else: ?>
 		<p>No drawings currently.</p>
@@ -40,7 +41,7 @@
 			 	<img src="Uploads/<?php if (isset($imagery['imagery'])) echo $imagery['imagery']; ?>" alt="Photo<?php echo $imagery['project_id']; ?>" max-width="400" /></img></br>
 			<?php endforeach; ?>
 		<?php else: ?>
-		<p>No drawings currently.</p>
+			<p>No drawings currently.</p>
 		<?php endif; ?>
   	</div>
 </div>

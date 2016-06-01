@@ -1,29 +1,29 @@
-'use strict';
+function validateForm() {
+	$(".errorMessage").remove();
 
-;( function ( document, window, index )
-{
-	var inputs = document.querySelectorAll( '.inputfile' );
-	Array.prototype.forEach.call( inputs, function( input )
-	{
-		var label	 = input.nextElementSibling,
-			labelVal = label.innerHTML;
+    var username = document.forms["registration"]["username_reg"].value;
+    var pass1 = document.forms["registration"]["password_reg1"].value;
+    var pass2 = document.forms["registration"]["password_reg2"].value;
+    var validationResult = true;
+    if (username == null || username == "") {
+    	$("#errors").append(generateErrorHtml"Please fill out username<"));
+        validationResult = false;
+    }
 
-		input.addEventListener( 'change', function( e )
-		{
-			var fileName = '';
-			if( this.files && this.files.length > 1 )
-				fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
-			else
-				fileName = e.target.value.split( '\\' ).pop();
+    if (username.length <= 5) {
+    	$("#errors").append(generateErrorHtml("Username needs to be at least 5 characters."));
+    	validationResult = false;
+    }
 
-			if( fileName )
-				label.querySelector( 'span' ).innerHTML = fileName;
-			else
-				label.innerHTML = labelVal;
-		});
+    if (pass1 != pass2) {
+    	$("#errors").append(generateErrorHtml("Passwords need to match."));
+    	validationResult = false;
+    } 
 
-		// Firefox bug fix
-		input.addEventListener( 'focus', function(){ input.classList.add( 'has-focus' ); });
-		input.addEventListener( 'blur', function(){ input.classList.remove( 'has-focus' ); });
-	});
-}( document, window, 0 ));
+    return validationResult;
+
+}
+
+function generateErrorHtml(errormessage) {
+	return "<p class='errorMessage' style='color:red'>"+errormessage+"</p>";
+}

@@ -10,13 +10,33 @@ function connect_database(){
 	mysqli_query($connection, "SET CHARACTER SET UTF8") or die("Ei saanud baasi utf-8-sse - ".mysqli_error($connection));
 }
 
+function getprofileimage() {
+
+	global $connection;
+
+	if (!empty($_SESSION['loggedinuser'])) {
+		$profileuser = $_SESSION['loggedinuser'];
+
+		$sqlprofileimage = "SELECT kasutajad.username, kasutajad.profileimage
+		FROM saasma_archiview_kasutajad AS kasutajad WHERE kasutajad.username = '$profileuser'";
+
+		$resultprofileimage = mysqli_query($connection, $sqlprofileimage);
+
+		$user_profileimage = array();
+
+		while ($profileimage = mysqli_fetch_assoc($resultprofileimage)) {
+			$user_profileimage[] = $profileimage;
+		}
+
+	}
+}
+
+
 function login(){
 
 	if (isset($_POST['loggedinuser'])) {
 		include_once('projects.html');
 	}
-
-	include_once('login.html');
 
 	if (isset($_SERVER['REQUEST_METHOD'])) {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -42,6 +62,8 @@ function login(){
 			}
 		}
 	}
+
+	include_once('login.html');
 }
 
 function logout(){
@@ -51,23 +73,52 @@ function logout(){
 }
 
 function registration(){
-	if (isset($_POST['loggedinuser'])) {
-		include_once('projects.html');
-	} else {
-		include_once('registration.html');
-	}
+	global $connection;
 
 	if (isset($_SERVER['REQUEST_METHOD'])) {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$errors = array();
+
 			if (empty($_POST['username_reg'])) {
 				$errors[] = "Please enter username.";
+			}else {
+				$reg_user = htmlspecialchars($_POST['username_reg']);
 			}
+			//get all the usernames from server
+			$sql = "SELECT kasutajad.username
+				FROM saasma_archiview_kasutajad AS kasutajad";
+
+			$resultusers = mysqli_query($connection, $sql);
+
+			$userquery = array();
+
+			while ($users = mysqli_fetch_assoc($resultusers)) {
+				$userquery[] = $users;
+			}
+
+			//check if such an user already exists
+			foreach ($userquery as $user) {
+				if ($user['username'] == $reg_user) {
+					$errors[] = "This username already exists.";
+				}
+			}
+
+			if (strlen($_POST['username_reg']) < 5) {
+				$errors[] = "Please enter a longer username.";
+			}
+
 			if ($_POST['password_reg1'] != $_POST['password_reg2']) {
 				$errors[] = "Passwords do not match, please enter again.";
 			}
+			if (strlen($_POST['password_reg1']) < 6) {
+				$errors[] = "Please enter a longer password.";
+			}
+
+
 			if (empty($_POST['password_reg1'])) {
 				$errors[] = "Please enter password.";
+			} else {
+				$reg_pass = htmlspecialchars($_POST['password_reg1']);
 			}
 			if (empty($_POST['password_reg2'])) {
 				$errors[] = "Please repeat password.";
@@ -75,13 +126,10 @@ function registration(){
 
 			if (empty($errors)){
 				//viska sisestatud andmed andmebaasi ja pane andmebaasist sisestatud kasutaja sessiooni, suuna projektide lehele, muidu kuva registration.html
-
-				echo "You have been registered!";
-
-				global $connection;
-				$registeredusername = mysqli_real_escape_string($connection, $_POST["username_reg"]);
-				$registeredpassword = mysqli_real_escape_string($connection, $_POST["password_reg1"]);
-				$sql = "INSERT INTO saasma_archiview_kasutajad (username, password) VALUES ('$registeredusername', SHA1('$registeredpassword'))";
+	
+				$registeredusername = mysqli_real_escape_string($connection, $reg_user);
+				$registeredpassword = mysqli_real_escape_string($connection, $reg_pass);
+				$sql = "INSERT INTO saasma_archiview_kasutajad (username, password, profileimage) VALUES ('$registeredusername', SHA1('$registeredpassword'), 'profile_image_default.png')";
 				$result = mysqli_query($connection, $sql) or die ("Proovi uuesti.");
 
 				if ($result) {
@@ -91,25 +139,40 @@ function registration(){
 						exit(0);
 					}
 				}
-			}
-
-			
-			echo $registeredusername;
-			echo $registeredpassword;
+			} 
 		}
+	}
+
+	if (isset($_POST['loggedinuser'])) {
+		include_once('projects.html');
+	} else {
+		include_once('registration.html');
 	}
 }
 
 function upload() {
+
 	global $connection;
 
+	if (empty($_SESSION['loggedinuser'])) {
+    	header("Location: ?page=projects");
+ 	}
+	$uploaderror = array();
 	$errors = array();
 	$success = array();
 	//upload project
 	if(isset($_POST['upload'])){
+
+		$projecttitleupload = htmlspecialchars($_POST['projecttitle_upload']);
+		$projecttextupload = htmlspecialchars($_POST['projecttext_upload']);
+
+			if (empty($projecttitleuplaod) && empty($projecttextupload)){
+				$uploaderror['upload'] = 'Palun sisesta oma projekti pealkiri ja kirjeldus.';
+			}
+
 		$user = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
-		$projecttitle = mysqli_real_escape_string($connection, $_POST['projecttitle_upload']);
-		$projecttext = mysqli_real_escape_string($connection, $_POST['projecttext_upload']);
+		$projecttitle = mysqli_real_escape_string($connection, $projecttitleupload);
+		$projecttext = mysqli_real_escape_string($connection, $projecttextupload);
 		$sql = "INSERT INTO saasma_archiview_projectcontent (username, projecttitle, projecttext)
 					VALUES('$user', '$projecttitle', '$projecttext');";
 		$result1 = mysqli_query($connection, $sql);
@@ -118,6 +181,8 @@ function upload() {
 		} else {
     		$errors['projectupload'] = 'Project upload failed.';
 		}
+
+		
 	//upload drawings
 		$total1 = count($_FILES['drawing_upload']['name']);
 
@@ -128,47 +193,75 @@ function upload() {
 				$drawingname = $_FILES['drawing_upload']['name'][$i];
 
 				$location = 'Uploads/';
-				print_r($location.$drawingname);
-				
-				if (move_uploaded_file($temporaryDrawingPath, $location.$drawingname)){
 
-
-					$drawingurl = mysqli_real_escape_string($connection, $drawingname);
-
-					$sql = "INSERT INTO saasma_archiview_drawings (drawing, project_id)
-					VALUES('$drawingurl', '$id');";
-					$result2 = mysqli_query($connection, $sql);
-
-					$success['Message'] = "Upload was successful.";
+				if (file_exists($location.$drawingname)) {
+					$uploaderror['upload'] = 'This file already exists. Please upload a different file or rename it.';
 				}
-				else {
-					$errors['drawingupload'] = 'Drawing upload failed.';
-	      		}
+
+				if ($_FILES['drawing_upload']['size'][$i] > 5000000) {
+					$uploaderror['upload'] = 'Please upload image that is smaller than 500 kb.';
+				}
+
+			
+
+				if (empty($uploaderror)) {
+				
+					if (move_uploaded_file($temporaryDrawingPath, $location.$drawingname)){
+
+
+						$drawingurl = mysqli_real_escape_string($connection, $drawingname);
+
+						$sql = "INSERT INTO saasma_archiview_drawings (drawing, project_id)
+						VALUES('$drawingurl', '$id');";
+						$result2 = mysqli_query($connection, $sql);
+
+						$success['Message'] = "Upload was successful.";
+					}
+					else {
+						$errors['drawingupload'] = 'Drawing upload failed.';
+		      		}
+
+	      		} 
 			}
 		}
 
 	//upload imagery
 		$total2 = count($_FILES['imagery_upload']['name']);
 		for ($i=0; $i<$total2; $i++){
-			$ImageryPath = $_FILES['imagery_upload']['tmp_name'][$i];
-			if ($ImageryPath != "") {
+			$temporaryImageryPath = $_FILES['imagery_upload']['tmp_name'][$i];
+
+			
+			if ($temporaryImageryPath != "") {
 
 				$imageryname = $_FILES['imagery_upload']['name'][$i];
 				$location = 'Uploads/';
-				
-				if (move_uploaded_file($ImageryPath, $location.$imageryname)){
 
-					$imagery = mysqli_real_escape_string($connection, $ImageryPath);
-
-					$sql = "INSERT INTO saasma_archiview_imagery (imagery, project_id)
-					VALUES('$imagery', '$id');";
-					$result2 = mysqli_query($connection, $sql);
-
-					$success['Message'] = "Upload was successful.";
+				if (file_exists($location.$imageryname)) {
+					$uploaderror['upload'] = 'This file already exists. Please upload a different file or rename it.';
 				}
-				else {
-					$errors['imageryupload'] = '3D image upload failed.';
-	      		}
+
+				if ($_FILES['imagery_upload']['size'][$i] > 5000000) {
+					$uploaderror['upload'] = 'Please upload image that is smaller than 5 Mb.';
+				}
+
+
+				if (empty($uploaderror)) {
+					if (move_uploaded_file($temporaryImageryPath, $location.$imageryname)){
+
+						$imageryurl = mysqli_real_escape_string($connection, $imageryname);
+
+						$sql = "INSERT INTO saasma_archiview_imagery (imagery, project_id)
+						VALUES('$imageryurl', '$id');";
+						$result2 = mysqli_query($connection, $sql);
+
+						$success['Message'] = "Upload was successful.";
+					}
+					else {
+						$errors['imageryupload'] = '3D image upload failed.';
+		      		}
+				} 
+				
+			
 			}
 		}
 
@@ -176,7 +269,7 @@ function upload() {
 		$errors['form'] = 'Please make sure to fill out fields and upload files';
 	}
 
-	if (empty($errors)){
+	if (empty($errors) && empty($uploaderror)){
 		$_SESSION['message'] = "Upload was successful.";
 			header("Location: ?page=showproject&id=$id");
 		exit(0);
@@ -184,7 +277,7 @@ function upload() {
 		$errors['save'] = "Please try to upload your project again.";
 	}
 
-	print_r($errors);
+	
 
 	include_once('upload.html');
 }
@@ -192,6 +285,10 @@ function upload() {
 function showproject() {
 
 	global $connection;
+
+	if (empty($_SESSION['loggedinuser'])) {
+    	header("Location: ?page=projects");
+ 	}
 
 	$errors = array();
 
@@ -256,10 +353,9 @@ function projects() {
 	
 	global $connection;
 
-	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, drawings.project_id, imagery.imagery, imagery.project_id
-	FROM saasma_archiview_projectcontent AS content
-	INNER JOIN saasma_archiview_drawings AS drawings ON content.id = drawings.project_id
-	INNER JOIN saasma_archiview_imagery AS imagery ON content.id = imagery.project_id"; 
+	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, imagery.imagery, imagery.project_id
+FROM saasma_archiview_projectcontent AS content
+LEFT JOIN saasma_archiview_imagery AS imagery ON content.id = imagery.project_id GROUP BY content.id"; 
 	
 	$result = mysqli_query($connection, $sql);
 
@@ -283,10 +379,11 @@ function myprojects() {
 
 	$currentuser = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
 
-	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, drawings.drawing, drawings.project_id, imagery.imagery, imagery.project_id
-	FROM saasma_archiview_projectcontent AS content
-	INNER JOIN saasma_archiview_drawings AS drawings ON content.id = drawings.project_id
-	INNER JOIN saasma_archiview_imagery AS imagery ON content.id = imagery.project_id WHERE content.username = '$currentuser'"; 
+	$sql = "SELECT content.id, content.username, content.projecttitle, content.projecttext, imagery.imagery, imagery.project_id
+			FROM saasma_archiview_projectcontent AS content
+			LEFT JOIN saasma_archiview_imagery AS imagery ON content.id = imagery.project_id
+			WHERE content.username =  '$currentuser'
+			GROUP BY content.id";
 
 
 	$result = mysqli_query($connection, $sql);
@@ -298,6 +395,78 @@ function myprojects() {
 	}
 
 	include_once('myprojects.html');
+}
+
+function editprofile() {
+	global $connection;
+
+	if (empty($_SESSION['loggedinuser'])) {
+    	header("Location: ?page=projects");
+ 	}
+
+ 	//take file from upload form
+	//upload to server
+ 	//place in folder
+
+ 		if (isset($_POST['profileimageupload'])) {
+
+
+ 			if(isset($_FILES["profilepicture"]["name"]) && isset($_FILES["profilepicture"]["tmp_name"])) {
+
+	 			$profileimagename = $_FILES["profilepicture"]["name"];
+	 			$profileimagetmpname = $_FILES["profilepicture"]["tmp_name"];
+
+	 			$error = array();
+	 			$error = $_FILES["profilepicture"]["error"];
+
+	 			if (isset($profileimagename)){
+	 				if (!empty($profileimagename)) {
+	 					$location = 'Profileimages/';
+
+
+
+	 					if (move_uploaded_file($profileimagetmpname, $location.$profileimagename)) {
+	 						$success['Message'] = "Profile image upload was successful.";
+	 					}
+
+	 					if (!empty($success)) {
+	 						$user = mysqli_real_escape_string($connection, $_SESSION['loggedinuser']);
+	 						$uploadedprofileimage = mysqli_real_escape_string($connection, $profileimagename);
+
+	 						$sqlnewprofileimage = "UPDATE saasma_archiview_kasutajad SET profileimage = '$uploadedprofileimage' WHERE username = '$user'";
+
+	 						$resultnewprofileimage = mysqli_query($connection, $sqlnewprofileimage);
+
+	 						echo $resultnewprofileimage;
+	 					}
+	 				}
+	 			}
+ 			}
+
+ 		}
+
+ 	if (empty($_SESSION['loggedinuser'])) {
+    	header("Location: ?page=projects");
+ 	}
+
+ 	//view current profile image, take image from server
+ 	if (!empty($_SESSION['loggedinuser'])) {
+ 		$profileuser = $_SESSION['loggedinuser'];
+
+    	$sqlprofileimage = "SELECT kasutajad.username, kasutajad.profileimage
+		FROM saasma_archiview_kasutajad AS kasutajad WHERE kasutajad.username = '$profileuser'";
+
+		$resultprofileimage = mysqli_query($connection, $sqlprofileimage) or die ("This user does not have profile image.");
+
+		$user_profileimage = array();
+
+		while ($profileimage = mysqli_fetch_assoc($resultprofileimage)) {
+			$user_profileimage[] = $profileimage;
+		}
+ 	}
+
+
+	include_once('editprofile.html');
 }
 
 function about() {

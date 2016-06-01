@@ -12,9 +12,13 @@
 	  	<div class="column2">
 	  		<h2>PROJECT DESCRIPTION</h2>
 	  		</br>
-	  		<input type="text" name="projecttitle_upload" placeholder="Project Title"/>
+	  		<div class="control-group">
+	  		<input type="text" name="projecttitle_upload" class="title-field" placeholder="Project Title"/>
+	  		</div>
 	  		<br/>
-	  		<textarea name="projecttext_upload" rows="25" cols="30" placeholder="Write project description here."></textarea>
+	  		<div class="control-group">
+	  		<textarea name="projecttext_upload" class="text-field" rows="25" cols="30" placeholder="Write project description here."></textarea>
+	  		</div>
 		</div>
 	  	<div class="column3">
 	  		<h2>UPLOAD 3D IMAGERY</h2>
@@ -26,5 +30,10 @@
 			
 	  	</div>
 	  	<p><input class="myButton3" type="submit" name="upload" value="UPLOAD"></p>
+	  	<?php if (isset($uploaderror)):?>
+		<?php foreach($uploaderror as $error):?>
+			<p style="text-align: center;"><div style="color:red;"><?php echo htmlspecialchars($error); ?></div></p>
+		<?php endforeach;?>
+	<?php endif;?>
 	</form>
 </div>

@@ -7,7 +7,7 @@
   		<div class="column2">
 
   		<?php $sisselogitudkasutaja = $_SESSION['loggedinuser'] ?>
-  		<h1>You have been logged in as: <?php echo $sisselogitudkasutaja ?>
+  		
   		<h1>MY PROJECTS</h1>
   		
   		<p>
@@ -28,7 +28,7 @@
   					<a id="projectthumbnail" href="?page=showproject&id=<?php echo $ind_query['id']; ?>">
   				<div id="floating_project2">
 					<span id="projecttitle"><?php echo $ind_query['projecttitle']; ?></span>
-					<img src="Uploads/<?php echo $ind_query['drawing'] ?>"></img>
+					<img src="Uploads/<?php echo $ind_query['imagery'] ?>"></img>
 				</div>
 				</a>
 				</td>
@@ -38,7 +38,7 @@
 			</tr>
 			<?php endforeach; ?>
 		<?php else:?>
-		<p>No projects yet, go upload one!</p>
+		<p style="text-align: center;">No projects yet, go upload one!</p>
 		<?php endif; ?>
 		</table>
 		

@@ -9,25 +9,32 @@ if (isset($_GET['page']) && $_GET['page']!=""){
 	$page=htmlspecialchars($_GET['page']);
 }
 
+require_once('getprofileimage.php');
 include_once('header.html');
 
 switch($page){
 	case "homepage":
+	
 		homepage();
 	break;
 	case "projects":
+
 		projects();
 	break;
 	case "myprojects":
+
 		myprojects();
 	break;
 	case "showproject";
+	
 		showproject();
 	break;
 	case "about":
+	
 		about();
 	break;
 	case "upload":
+	
 		upload();
 	break;
 	case "login":
@@ -35,6 +42,10 @@ switch($page){
 	break;
 	case "registration":
 		registration();
+	break;
+	case "editprofile":
+	
+		editprofile();
 	break;
 	case "logout":
 		logout();

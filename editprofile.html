@@ -1,0 +1,36 @@
+<div class="login_registration">
+		<div class="login_registration-screen">
+			
+			<div class="login_registration-form">
+				<div class="control-group">
+					
+						<?php if (!empty($user_profileimage)) :?>
+			
+				 			<?php foreach ($user_profileimage as $userimage) :?>
+								<img src="Profileimages/<?php echo $userimage['profileimage'] ?>" width="150"></img>
+
+							<?php endforeach; ?>
+						<?php else: ?>
+							<p>No image to display.</p>
+						<?php endif; ?>
+						<form action="?page=editprofile" method="POST" enctype="multipart/form-data">
+
+						<div class="file_button_container">
+							<input type="file" name="profilepicture" id="file-1"  />
+						
+						</div>
+					
+					
+							<input type="submit" name="profileimageupload" class="btn btn-primary btn-large btn-block" value="Update">
+						</form>
+				</div>
+			</div>
+		</div>
+
+	<?php if (isset($errors)):?>
+		<?php foreach($errors as $error):?>
+			<div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
+		<?php endforeach;?>
+	<?php endif;?>
+</div>
+

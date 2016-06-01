@@ -5,8 +5,8 @@
 	<meta charset="utf-8" />
 
 	<link rel="stylesheet" type="text/css" href="stylefile.css">
-
-	<script type="text/javascript" src="projectscript.js"></script>
+  	<script src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+	<script src="projectscript.js"></script>
 
 	<title>ArchiView - The tool for displaying your architecture work</title>
 
@@ -28,8 +28,19 @@
 				<li id="banner_right"><a href="?page=registration">REGISTER</a></li> 
 				<li id="banner_right"><a href="?page=login">LOG IN</a></li> 
 			<?php endif; ?>
-			<li id="banner_right"><img id="profile_image" src="Pildid/profile_image_default.png"></img></li>
+			
 			<?php if(isset($_SESSION['loggedinuser'])): ?>
+				
+					<?php if (!empty($user_profileimage)) :?>
+			
+				 			<?php foreach ($user_profileimage as $userimage) :?>
+				 			<li id="banner_right">
+				 			<a id="profileimage" href="?page=editprofile"><img id="profile_image" src="Profileimages/<?php echo $userimage['profileimage']; ?>"></img></a></li>
+								
+							<?php endforeach; ?>
+					
+					<?php endif; ?>
+
 				<li id="banner_right">
 					<a><?php 
 						$sisselogitudkasutaja = $_SESSION['loggedinuser'];
