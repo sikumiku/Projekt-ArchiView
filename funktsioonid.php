@@ -166,7 +166,7 @@ function upload() {
 		$projecttitleupload = htmlspecialchars($_POST['projecttitle_upload']);
 		$projecttextupload = htmlspecialchars($_POST['projecttext_upload']);
 
-			if (empty($projecttitleuplaod) && empty($projecttextupload)){
+			if (empty($projecttitleupload) && empty($projecttextupload)){
 				$uploaderror['upload'] = 'Palun sisesta oma projekti pealkiri ja kirjeldus.';
 			}
 
@@ -202,7 +202,20 @@ function upload() {
 					$uploaderror['upload'] = 'Please upload image that is smaller than 500 kb.';
 				}
 
-			
+				if ($_FILES['drawing_upload']['error'][$i] !== UPLOAD_ERR_OK) {
+					die ("Upload failed with error code " . $_FILES['drawing_upload']['error'][$i]);
+				}
+
+				$info = getimagesize($temporaryDrawingPath);
+				if ($info === FALSE) {
+					die("Unable to determine image type of uploaded file.");
+					$uploaderror['upload'] = 'Unable to determine uploaded filetype.';
+				}
+
+				if (($info[2] !== IMAGETYPE_GIF) && ($info[2] !== IMAGETYPE_JPEG) && ($info[2] !== IMAGETYPE_PNG)) {
+					die("File is not gif, jpeg or png.");
+					$uploaderror['upload'] = 'Please upload only gif, jpeg or png fileformats.';
+				}
 
 				if (empty($uploaderror)) {
 				
@@ -243,6 +256,22 @@ function upload() {
 				if ($_FILES['imagery_upload']['size'][$i] > 5000000) {
 					$uploaderror['upload'] = 'Please upload image that is smaller than 5 Mb.';
 				}
+
+				if ($_FILES['imagery_upload']['error'][$i] !== UPLOAD_ERR_OK) {
+					die ("Upload failed with error code " . $_FILES['imagery_upload']['error'][$i]);
+				}
+
+				$info = getimagesize($temporaryImageryPath);
+				if ($info === FALSE) {
+					die("Unable to determine image type of uploaded file.");
+					$uploaderror['upload'] = 'Unable to determine uploaded filetype.';
+				}
+
+				if (($info[2] !== IMAGETYPE_GIF) && ($info[2] !== IMAGETYPE_JPEG) && ($info[2] !== IMAGETYPE_PNG)) {
+					die("File is not gif, jpeg or png.");
+					$uploaderror['upload'] = 'Please upload only gif, jpeg or png fileformats.';
+				}
+
 
 
 				if (empty($uploaderror)) {
@@ -423,6 +452,28 @@ function editprofile() {
 	 				if (!empty($profileimagename)) {
 	 					$location = 'Profileimages/';
 
+	 					if (file_exists($location.$profileimagename)) {
+							$uploaderror['upload'] = 'This file already exists. Please upload a different file or rename it.';
+						}
+
+						if ($_FILES['profilepicture']['size'] > 5000000) {
+							$uploaderror['upload'] = 'Please upload image that is smaller than 5 Mb.';
+						}
+
+						if ($error !== UPLOAD_ERR_OK) {
+							die ("Upload failed with error code " . $error);
+						}
+
+						$info = getimagesize($profileimagetmpname);
+						if ($info === FALSE) {
+							die("Unable to determine image type of uploaded file.");
+							$uploaderror['upload'] = 'Unable to determine uploaded filetype.';
+						}
+
+						if (($info[2] !== IMAGETYPE_GIF) && ($info[2] !== IMAGETYPE_JPEG) && ($info[2] !== IMAGETYPE_PNG)) {
+							die("File is not gif, jpeg or png.");
+							$uploaderror['upload'] = 'Please upload only gif, jpeg or png fileformats.';
+						}
 
 
 	 					if (move_uploaded_file($profileimagetmpname, $location.$profileimagename)) {
